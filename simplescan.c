@@ -35,9 +35,9 @@ int main(int argc, char **argv) {
         perror("hci_inquiry");
     
     for (i = 0; i < num_rsp; ++i) {
-        ba2str(&(devices+i)->baddr, addr);
+        ba2str(&(devices+i)->bdaddr, addr);
         memset(name, 0, sizeof(name));
-        if (0 != hci_read_remote_name(sock, &(devices+i)->baddr, sizeof(name), name, 0))
+        if (0 != hci_read_remote_name(sock, &(devices+i)->bdaddr, sizeof(name), name, 0))
             strcpy(name, "[unknown]");
         printf("%s | %s\n", addr, name);
     }

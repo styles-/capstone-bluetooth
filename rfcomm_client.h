@@ -10,5 +10,10 @@
 #define rfcomm_client_h
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/rfcomm.h>
 
 #endif /* rfcomm_client_h */
