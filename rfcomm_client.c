@@ -65,12 +65,18 @@ int main(int argc, char **argv) {
     status = connect( sock, (struct sockaddr *) &addr, sizeof(addr) );
     
     // send a message
-    char *msg = "what up dog?";
-    if ( status == 0 )
-        status = send( sock, msg, sizeof(msg), 0 );
+    char msg[255];
+    if ( status == 0 ) {
+        while (strcmp(msg, "exit") != 0) {
+            memset(msg, 0, sizeof(msg));
+            printf("Enter a message: ");
+            scanf("%s", msg);
+            status = send( sock, msg, sizeof(msg), 0 );
     
-    if ( status < 0 )
-        perror("bad status");
+            if ( status < 0 )
+                perror("bad status");
+        }
+    }
 
     close( sock );
     return EXIT_SUCCESS;

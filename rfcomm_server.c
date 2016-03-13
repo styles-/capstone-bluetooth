@@ -32,12 +32,15 @@ int main(int argc, char **argv) {
     
     ba2str( &rem_addr.rc_bdaddr, buf );
     fprintf(stderr, "accepted connection from %s\n", buf);
-    memset(buf, 0, sizeof(buf));
     
-    // read data from the client
-    bytes_read = recv(client, buf, sizeof(buf), 0);
-    if ( bytes_read > 0 )
-        printf("received [%s]\n", buf);
+    while ( strcmp(buf, "exit") != 0) {
+        memset(buf, 0, sizeof(buf));
+        
+        // read data from the client
+        bytes_read = recv(client, buf, sizeof(buf), 0);
+        if ( bytes_read > 0 )
+            printf("received [%s]\n", buf);
+    }
     
     //close connection
     close( client );
