@@ -64,18 +64,20 @@ int main(int argc, char **argv) {
     // connect to server
     status = connect( sock, (struct sockaddr *) &addr, sizeof(addr) );
     
+    int i = 0;
     // send a message
     char msg[255];
     if ( status == 0 ) {
         while (strcmp(msg, "exit") != 0) {
             memset(msg, 0, sizeof(msg));
-            puts("Enter a message: ");
+            printf("$[%3d] Enter a message: ", i++);
             scanf("%s", msg);
 //            status = send( sock, msg, sizeof(msg), 0 );
             status = write( sock, msg, sizeof(msg) );
     
             if ( status < 0 )
                 perror("bad status");
+            puts("");
         }
     }
 
