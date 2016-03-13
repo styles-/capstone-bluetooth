@@ -22,6 +22,6 @@
 #define ADDR_CODY_LAPTOP "A0:99:9B:13:05:04"
 #define ADDR_HC_05 "20:15:04:30:74:62"
 #define ADDR_BT_PLUG_1 "5C:F3:70:76:BE:99"
-#define ADDR_BT_PLUG_2 ""
+#define ADDR_BT_PLUG_2 "20:15:04:30:74:62"
 
 #endif /* simplescan_h */
