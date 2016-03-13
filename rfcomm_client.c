@@ -7,6 +7,7 @@
 //
 
 #include "rfcomm_client.h"
+#include "bt_info.h"
 
 int main(int argc, char **argv) {
     
@@ -50,7 +51,7 @@ int main(int argc, char **argv) {
     */
     struct sockaddr_rc addr = { 0 };
     int sock, status;
-    char dest[18] = "01:23:45:67:89:AB";
+    char dest[18] = ADDR_BT_PLUG_2;
     
     // allocate a socket
     sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
