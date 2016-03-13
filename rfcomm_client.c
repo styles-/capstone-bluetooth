@@ -69,9 +69,10 @@ int main(int argc, char **argv) {
     if ( status == 0 ) {
         while (strcmp(msg, "exit") != 0) {
             memset(msg, 0, sizeof(msg));
-            printf("Enter a message: ");
+            puts("Enter a message: ");
             scanf("%s", msg);
-            status = send( sock, msg, sizeof(msg), 0 );
+//            status = send( sock, msg, sizeof(msg), 0 );
+            status = write( sock, msg, sizeof(msg) );
     
             if ( status < 0 )
                 perror("bad status");
