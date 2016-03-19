@@ -9,6 +9,8 @@
 #ifndef bt_info_h
 #define bt_info_h
 
+#define UUID_STR "9159BA6D-F5BA-43C6-8C9B-0E318CBD1809"
+
 #define ADDR_CODY_NEXUS7 "AC:22:0B:46:EA:EB"
 #define ADDR_CODY_NEXUS5X "88:07:4B:37:0E:F2"
 #define ADDR_CODY_LGG3 "22:22:6F:E2:50:44"
