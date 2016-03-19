@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
     char buf[1024] = { 0 };
-    int sock, client, bytes_read;
+    int sock, client, bytes_read, status;
     unsigned int opt = sizeof(rem_addr);
     
     sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -31,12 +31,21 @@ int main(int argc, char **argv) {
     
     while ( strcmp(buf, "exit") != 0) {
         memset(buf, 0, sizeof(buf));
+        printf("Enter a message: ");
+//        sprintf(buf, "%s", )
+        scanf("%s", buf);
         
-        bytes_read = recv(client, buf, sizeof(buf), 0);
-        if ( bytes_read > 0 )
-            printf("received [%s]\n", buf);
+        status = send( client, buf, sizeof(buf) );
+        if (status < 0)
+            perror("bad status");
+        puts("");
+//        bytes_read = recv(client, buf, sizeof(buf), 0);
+//        if ( bytes_read > 0 )
+//            printf("received [%s]\n", buf);
     }
     
     close( client );
     close( sock );
+    
+    return EXTI_SUCCESS;
 }
