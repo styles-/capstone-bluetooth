@@ -14,6 +14,14 @@ int main(int argc, char **argv) {
     char buf[1024] = { 0 };
     int sock, client, bytes_read, status;
     unsigned int opt = sizeof(rem_addr);
+    uuid_t uuid = NULL;
+    if ( uuid_parse(UUID_SPP, uuid) < 0 ) {
+        perror("bad uuid");
+        exit(EXIT_FAILURE);
+    }
+    char uuid_str[64] = { 0 };
+    uuid_unparse(uuid, uuid_str);
+    printf("uuid: [%s]\n", uuid_str);
     
     sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
     
@@ -35,7 +43,7 @@ int main(int argc, char **argv) {
 //        sprintf(buf, "%s", )
         scanf("%s", buf);
         
-        status = send( client, buf, sizeof(buf) );
+        status = send( client, buf, sizeof(buf), 0 );
         if (status < 0)
             perror("bad status");
         puts("");
@@ -47,5 +55,5 @@ int main(int argc, char **argv) {
     close( client );
     close( sock );
     
-    return EXTI_SUCCESS;
+    return EXIT_SUCCESS;
 }
