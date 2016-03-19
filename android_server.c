@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     char buf[1024] = { 0 };
     int sock, client, bytes_read, status;
     unsigned int opt = sizeof(rem_addr);
-    uuid_t uuid = NULL;
+    uuid_t uuid;
     if ( uuid_parse(UUID_SPP, uuid) < 0 ) {
         perror("bad uuid");
         exit(EXIT_FAILURE);
