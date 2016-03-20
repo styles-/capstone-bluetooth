@@ -51,7 +51,8 @@ int main(int argc, char **argv) {
     */
     struct sockaddr_rc addr = { 0 };
     int sock, status;
-    char dest[18] = ADDR_BT_PLUG_2;
+//    char dest[18] = ADDR_BT_PLUG_2;
+    char dest[18] = ADDR_CODY_NEXUS5X;
     
     // allocate a socket
     sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);

@@ -10,6 +10,30 @@
 
 int main(int argc, char **argv) {
     
+    /**
+    inquiry_info *devices = NULL;
+    int max_rsp, num_rsp;
+    int adapter_id, sock_hci, len, flags;
+    int i;
+    char addr[19] = { 0 };
+    char name[248] = { 0 };
+    
+    adapter_id = hci_get_route(NULL);
+    sock_hci = hci_open_dev( adapter_id );
+    
+    if (adapter_id < 0 || sock < 0) {
+        perror("Opening socket..");
+        exit(EXIT_FAILURE);
+    }
+    
+    len = 8;
+    max_rsp = 255;
+    flags = IREQ_CACHE_FLUSH;
+    devices = (inquiry_info *) malloc(max_rsp * sizeof(inquiry_info));
+    
+    num_rsp = hci_inquiry(adapter_id, len, max_rsp, NULL, &devices, flags);
+    */
+    
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
     char buf[1024] = { 0 };
     int sock, client, bytes_read, status;
