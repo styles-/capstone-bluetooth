@@ -11,9 +11,9 @@
 
 //#define UUID_STR "9159BA6D-F5BA-43C6-8C9B-0E318CBD1809"
 
-sdp_session_t* register_service() {
-    
-}
+//sdp_session_t* register_service() {
+
+//}
 
 int main() {
     uint32_t uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
@@ -28,7 +28,9 @@ int main() {
     
     int test = uuid_compare(uu1, uu2);
     if (test == 0)
-        printf
+        printf("same uuid\n");
+    else
+        printf("different uuid\n");
     
     char uuid_str[64] = { 0 };
     uuid_unparse(uuid, uuid_str);
