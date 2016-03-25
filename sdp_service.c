@@ -13,10 +13,10 @@
 
 sdp_session_t* register_service() {
     uint32_t svc_uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
-    uint8_t rfcomm_channel = 14;
-    const char *service_name = "Test Android SDP Service";
+    uint8_t rfcomm_channel = 11;
+    const char *service_name = "Test SDP Service";
     const char *service_desc = "An experimental sdp service";
-    const char *service_prov = "Cody Price";
+    const char *service_prov = "CodyPrice";
     
     uuid_t root_uuid, l2cap_uuid, rfcomm_uuid, svc_uuid, svc_class_uuid;
     sdp_list_t  *l2cap_list = 0,
