@@ -19,7 +19,7 @@ int main() {
     uint32_t uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
     
     uuid_t uu1, uu2;
-    if ( uuid_parse(UUID_SPP, u1) < 0 ) {
+    if ( uuid_parse(UUID_SPP, uu1) < 0 ) {
         perror("bad uuid");
         exit(EXIT_FAILURE);
     }
