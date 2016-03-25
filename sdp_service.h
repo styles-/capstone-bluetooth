@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include <uuid/uuid.h>
+//#include <uuid/uuid.h>
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 #include <bluetooth/hci.h>
