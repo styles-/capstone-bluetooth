@@ -9,6 +9,7 @@
 #ifndef bt_info_h
 #define bt_info_h
 
+#define UUID_GENERIC_RFCOMM "00001101-0000-1000-8000-00805F9B34FB"
 #define UUID_PNP "00001200-0000-1000-8000-00805F9B34FB"
 #define UUID_GAP "00001800-0000-1000-8000-00805F9B34FB"
 #define UUID_GATT "00001801-0000-1000-8000-00805F9B34FB"
@@ -22,5 +23,14 @@
 #define ADDR_HC_05 "20:15:04:30:74:62"
 #define ADDR_BT_PLUG_1 "5C:F3:70:76:BE:99"
 #define ADDR_BT_PLUG_2 "5C:F3:70:76:B8:C2"
+
+/**
+ * example code for checking errors
+ */
+//int dev¯id = h c i g e t route ( NULL ) ;
+//if( dev¯id < 0 ) {
+//    fprintf(stderr , "error code %d: %s\n" , errno , strerror(errno ) ) ;
+//    exit ( 1 ) ;
+//}
 
 #endif /* bt_info_h */
