@@ -32,7 +32,7 @@ sdp_session_t* register_service() {
     sdp_session_t *session = 0;
     
     // set the general service ID
-    sdp_uuid128_create( &srv_uuid, &srv_uuid_int );
+    sdp_uuid128_create( &svc_uuid, &svc_uuid_int );
     sdp_set_service_id( &record, svc_uuid );
     
     // set the service class
