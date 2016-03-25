@@ -79,6 +79,7 @@ sdp_session_t* register_service() {
     // connect to the local SDP server, register the service record, and disconnect
     session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
 //    sdp_record_register(session, &record, 0);
+    sdp_record_register(session, record, 0);
     
     // cleanup
     sdp_data_free( channel );
