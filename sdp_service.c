@@ -58,7 +58,7 @@ sdp_session_t* register_service() {
     
     // register the RFCOMM channel for RFCOMM sockets
     sdp_uuid16_create(&rfcomm_uuid, RFCOMM_UUID);
-    channel = sdp_date_alloc(SDP_UINT8, &rfcomm_channel);
+    channel = sdp_data_alloc(SDP_UINT8, &rfcomm_channel);
     rfcomm_list = sdp_list_append( 0, &rfcomm_uuid );
     sdp_list_append( rfcomm_list, channel );
     sdp_list_append( proto_list, rfcomm_list );
