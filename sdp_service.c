@@ -37,6 +37,10 @@ sdp_session_t* register_service() {
 //    sdp_set_service_id( &record, svc_uuid );
     sdp_set_service_id( record, svc_uuid );
     
+    // set the Service class ID
+//    sdp_list_t service_class = { NULL, &svc_uuid };
+//    sdp_set_service_classes
+    
     // set the service class
     sdp_uuid16_create( &svc_class_uuid, SERIAL_PORT_SVCLASS_ID );
     svc_class_list = sdp_list_append(0, &svc_class_uuid);
@@ -78,6 +82,10 @@ sdp_session_t* register_service() {
     
     // connect to the local SDP server, register the service record, and disconnect
     session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
+    if (session == (sdp_session_t *) NULL) {
+        fprintf(stderr, "Error: Device not found\n");
+        exit(EXIT_FAILURE);
+    }
 //    sdp_record_register(session, &record, 0);
     sdp_record_register(session, record, 0);
     
