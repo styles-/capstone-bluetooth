@@ -21,4 +21,9 @@
 #include <bluetooth/sdp.h>
 #include <bluetooth/sdp_lib.h>
 
+sdp_session_t *register_service(const uint8_t rfcomm_channel);
+int init_server(const int port);
+char *read_server(const int client);
+void write_server(const int client, const char *msg);
+
 #endif /* sdp_service_h */
