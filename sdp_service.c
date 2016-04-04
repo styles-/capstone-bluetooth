@@ -37,7 +37,9 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     
     char str[256] = "";
     sdp_uuid2strn(&svc_uuid, str, 256);
+#ifdef DEBUG
     printf("Registering UUID %s\n", str);
+#endif
     
     // set the service class
     sdp_uuid16_create(&svc_class_uuid, SERIAL_PORT_SVCLASS_ID);
@@ -96,7 +98,6 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
 
 int init_server(const int port) {
     int result, sock, client;
-//    int result, sock, client, bytes_read, bytes_sent;
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
     char buffer[1024] = { 0 };
     socklen_t opt = sizeof(rem_addr);
@@ -106,27 +107,34 @@ int init_server(const int port) {
     loc_addr.rc_bdaddr = *BDADDR_ANY;
     loc_addr.rc_channel = (uint8_t) port;
     
-    // register service
-    sdp_session_t *session = register_service(port);
-    
     // allocate socket
     sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+#ifdef DEBUG
     printf("socket() returned %d\n", sock);
+#endif
     
-    // bind socket to port 3 of the first available
+    // bind socket to <port> of the first available
     result = bind(sock, (struct sockaddr *) &loc_addr, sizeof(loc_addr));
+#ifdef DEBUG
     printf("bind() on channel %d return %d\n", port, result);
+#endif
     
     // put socket into listening mode
     result = listen(sock, 1);
+#ifdef DEBUG
     printf("listen() returned %d\n", result);
+#endif
     
     //sdpRegisterL2cap(port)
     
     // accept one connection
-    printf("calling accept()\n");
+#ifdef DEBUG
+    puts("calling accept()\n");
+#endif
     client = accept(sock, (struct sockaddr *) &rem_addr, &opt);
+#ifdef DEBUG
     printf("accept() returned %d\n", client);
+#endif
     
     ba2str(&rem_addr.rc_bdaddr, buffer);
     fprintf(stderr, "accepted connection from %s\n", buffer);
@@ -141,7 +149,9 @@ void read_server(const int client, char *response) {
 //    int bytes_read = read(client, input, sizeof(input));
     int bytes_read = read(client, response, sizeof(response));
     if (bytes_read > 0) {
+#ifdef DEBUG
         printf("recieved [%s]\n", response);
+#endif
 //        printf("recieved [%s]\n", input);
 //        return input;
 //    } else {
@@ -156,35 +166,24 @@ void write_server(const int client, const char *msg) {
     sprintf(msgArray, msg);
     bytes_sent = write(client, msgArray, sizeof(msgArray));
     if (bytes_sent > 0)
+#ifdef DEBUG
         printf("sent [%s]\n", msgArray);
+#endif
 }
 
 int main() {
-    
 #ifdef DEBUG
     puts("Debugging enabled..");
 #endif
     
-    int client = init_server(14);
+    int port = 14;
+    // register service
+    sdp_session_t *session = register_service(port);
+    
+    int client = init_server(port);
     sleep(5);
     getchar();
 //    sdp_close( session );
     close(client);
     return EXIT_SUCCESS;
-//    if ( uuid_parse(UUID_SPP, uu1) < 0 ) {
-//        perror("bad uuid");
-//        exit(EXIT_FAILURE);
-//    }
-    
-//    sdp_uuid128_create( &uu2, &uuid_int );
-    
-//    int test = uuid_compare(uu1, uu2);
-//    if (test == 0)
-//        printf("same uuid\n");
-//    else
-//        printf("different uuid\n");
-    
-//    char uuid_str[64] = { 0 };
-//    uuid_unparse(uuid, uuid_str);
-//    printf("uuid: [%s]\n", uuid_str);
 }
