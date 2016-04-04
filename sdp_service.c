@@ -95,7 +95,8 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
 }
 
 int init_server(const int port) {
-    int result, sock, client, bytes_read, bytes_sent;
+    int result, sock, client;
+//    int result, sock, client, bytes_read, bytes_sent;
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
     char buffer[1024] = { 0 };
     socklen_t opt = sizeof(rem_addr);
@@ -129,7 +130,7 @@ int init_server(const int port) {
     
     ba2str(&rem_addr.rc_bdaddr, buffer);
     fprintf(stderr, "accepted connection from %s\n", buffer);
-    memset(buffer, 0, sizeof(buffer));
+//    memset(buffer, 0, sizeof(buffer));
     
     return client;
 }
@@ -159,6 +160,10 @@ void write_server(const int client, const char *msg) {
 }
 
 int main() {
+    
+#ifdef DEBUG
+    puts("Debugging enabled..");
+#endif
     
     int client = init_server(14);
     sleep(5);
