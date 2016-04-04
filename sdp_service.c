@@ -189,7 +189,7 @@ void write_server(const int client, const char *msg) {
 
 inline void handleError(char *msg) {
     // perror(msg);
-    fprintf(stderr, "%s -> %s(%d)\n", msg, strerr(errno), errno);
+    fprintf(stderr, "%s -> %s(%d)\n", msg, strerror(errno), errno);
     exit(EXIT_FAILURE);
 }
 
