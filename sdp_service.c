@@ -105,7 +105,8 @@ sdp_session_t* register_service() {
 */
 
 sdp_session_t *register_service(const uint8_t rfcomm_channel) {
-    uint32_t svc_uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
+    int32_t svc_uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
+    //uint32_t svc_uuid_int[] = { 0x00001101, 0x00001000, 0x80000080, 0x5f9b34fb };
     const char *service_name = "My EMG Arm Bluetooth Server";
     const char *svc_dsc = "A server that interfaces with the My EMG Arm Android app";
     const char *service_prov = "MyEmgArm";
@@ -138,7 +139,7 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     
     // set the Bluetooth profile information
     sdp_uuid16_create(&profile.uuid, SERIAL_PORT_PROFILE_ID);
-    profile.version = 0x0100;
+    profile.version = 0x1000;
     profile_list = sdp_list_append(0, &profile);
     sdp_set_profile_descs(&record, profile_list);
     
@@ -167,8 +168,16 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     
     // connect to the local SDP server, register the service record, and disconnect
     session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
-    sdp_record_register(session, &record, 0);
-    
+    if (session == NULL) {
+        fprintf(stderr, "Error: session == null | %s(%d)\n", strerror(errno), errno);
+        exit(EXIT_FAILURE);
+    } else {
+        int test = sdp_record_register(session, &record, 0);
+        if (test < 0) {
+            fprintf(stderr, "sdp_record_register error\n");
+            exit(EXIT_FAILURE);
+        }
+    }
     // cleanup
     sdp_data_free(channel);
     sdp_list_free(l2cap_list, 0);
@@ -196,11 +205,11 @@ int init_server(const int port) {
     sdp_session_t *session = register_service(port);
     
     // allocate socket
-    sock = socket(AF_BLUETOOTH, SOCKS_STREAM, BTPROTO_RFCOMM);
+    sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
     printf("socket() returned %d\n", sock);
     
     // bind socket to port 3 of the first available
-    result = bind(sock, (struct sockaddr *) &lock_addr, sizeof(loc_addr));
+    result = bind(sock, (struct sockaddr *) &loc_addr, sizeof(loc_addr));
     printf("bind() on channel %d return %d\n", port, result);
     
     // put socket into listening mode
@@ -210,7 +219,7 @@ int init_server(const int port) {
     //sdpRegisterL2cap(port)
     
     // accept one connection
-    printf("calling accept9)\n");
+    printf("calling accept()\n");
     client = accept(sock, (struct sockaddr *) &rem_addr, &opt);
     printf("accept() returned %d\n", client);
     
