@@ -11,6 +11,15 @@
 
 //#define UUID_STR "9159BA6D-F5BA-43C6-8C9B-0E318CBD1809"
 
+/**
+ * register_service
+ * args:
+ *  - rfcomm_channel:
+ * returns:
+ *  - sdp_session_t*
+ * description:
+ *  - 
+ */
 sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     int32_t svc_uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
     //uint32_t svc_uuid_int[] = { 0x00001101, 0x00001000, 0x80000080, 0x5f9b34fb };
@@ -37,9 +46,9 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     
     char str[256] = "";
     sdp_uuid2strn(&svc_uuid, str, 256);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("Registering UUID %s\n", str);
-#endif
+    #endif
     
     // set the service class
     sdp_uuid16_create(&svc_class_uuid, SERIAL_PORT_SVCLASS_ID);
@@ -77,13 +86,10 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     
     // connect to the local SDP server, register the service record, and disconnect
     session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
-    if (session == NULL) {
-        // fprintf(stderr, "Error: (sdp_session_t *) session == null -> %s(%d)\n", strerror(errno), errno);
-        // exit(EXIT_FAILURE);
+    if (session == NULL)
         handleError("Error: (sdp_session_t *) session == null");
-    } else {
+    else
         sdp_record_register(session, &record, 0);
-    }
     
     // cleanup
     sdp_data_free(channel);
@@ -97,6 +103,15 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     return session;
 }
 
+/**
+ * init_server
+ * args:
+ *  - port:
+ * returns:
+ *  - 
+ * description:
+ *  - 
+ */
 int init_server(const int port) {
     int result, sock, client;
     struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
@@ -110,47 +125,40 @@ int init_server(const int port) {
     
     // allocate socket
     sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
-    if (sock < 0) {
-        fprintf(stderr, "Error: socket() unsuccessful -> %s(%d)\n", strerror(errno), errno);
-        exit(EXIT_FAILURE);
-    }
-#ifdef DEBUG
+    if (sock < 0) 
+        handleError("Error: socket() unsuccessful");
+    #ifdef DEBUG
     printf("socket() was successful and returned %d\n", sock);
-#endif
+    #endif
     
     // bind socket to <port> of the first available
     result = bind(sock, (struct sockaddr *) &loc_addr, sizeof(loc_addr));
-    if (result != 0) {
-        fprintf(stderr, "Error: bind() unsuccessful -> %s(%d)\n", strerror(errno), errno);
-        exit(EXIT_FAILURE);
-    }
-#ifdef DEBUG
+    if (result != 0)
+        handleError("Error: bind() unsuccessful");
+    #ifdef DEBUG
     printf("bind() on channel %d was successful\n", port);
-#endif
+    #endif
     
     // put socket into listening mode
     result = listen(sock, 1);
-    if (result != 0) {
-        fprintf(stderr, "Error: listen() unsuccessful -> %s(%d)\n", strerror(errno), errno);
-        exit(EXIT_FAILURE);
-    }
-#ifdef DEBUG
+    if (result != 0)
+        handleError("Error: listen() unsuccessful");
+    #ifdef DEBUG
     puts("listen() was successful");
-#endif
+    #endif
     
     //sdpRegisterL2cap(port)
     
     // accept one connection
-#ifdef DEBUG
+    #ifdef DEBUG
     puts("calling accept()..\n");
-#endif
+    #endif
     client = accept(sock, (struct sockaddr *) &rem_addr, &opt);
-    if (client < 0) {
-
-    }
-#ifdef DEBUG
+    if (client < 0)
+        handleError("Error: unable to accept Bluetooth socket");
+    #ifdef DEBUG
     printf("accept() returned %d\n", client);
-#endif
+    #endif
     
     ba2str(&rem_addr.rc_bdaddr, buffer);
     fprintf(stderr, "accepted connection from %s\n", buffer);
@@ -159,53 +167,91 @@ int init_server(const int port) {
     return client;
 }
 
+/**
+ * read_server
+ * args:
+ *  - client:
+ *  - response:
+ * returns:
+ *  - void
+ * description:
+ *  - read data from the client
+ */
 void read_server(const int client, char *response) {
-    // read data from the client
-//    char input[1024] = { 0 };
-//    int bytes_read = read(client, input, sizeof(input));
     int bytes_read = read(client, response, sizeof(response));
+
     if (bytes_read > 0) {
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("recieved [%s]\n", response);
-#endif
-//        printf("recieved [%s]\n", input);
-//        return input;
-//    } else {
-//        return "";
+        #endif
+    } else {
+        #ifdef DEBUG
+        puts("Nothing received from client!");
+        #endif
     }
 }
 
+/**
+ * write_server
+ * args:
+ *  - client:
+ *  - msg:
+ * returns:
+ *  - void
+ * description:
+ *  - send data to the client
+ */
 void write_server(const int client, const char *msg) {
-    // send data to the client
+    if (strlen(msg) == 0) {
+        #ifdef DEBUG
+        puts("Nothing to send to the client!");
+        #endif
+        return;
+    }
+
     char msgArray[1024] = { 0 };
     int bytes_sent;
     sprintf(msgArray, msg);
     bytes_sent = write(client, msgArray, sizeof(msgArray));
-    if (bytes_sent > 0)
-#ifdef DEBUG
+    if (bytes_sent > 0) {
+        #ifdef DEBUG
         printf("sent [%s]\n", msgArray);
-#endif
+        #endif
+    } else {
+        handleError("Error: couldn't send data to client");
+    }
 }
 
+/**
+ * handleError
+ * args:
+ *  - msg:
+ * returns:
+ *  - void
+ * description:
+ *  - print custom error message and errno string and then exit()
+ */
 inline void handleError(char *msg) {
-    // perror(msg);
     fprintf(stderr, "%s -> %s(%d)\n", msg, strerror(errno), errno);
     exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv) {
-#ifdef DEBUG
+    #ifdef DEBUG
     puts("Debugging enabled..");
-#endif
+    #endif
 
     int port = 14;
+
     // register service
     sdp_session_t *session = register_service(port);
     
     int client = init_server(port);
     sleep(5);
     getchar();
-//    sdp_close( session );
+    
+    sdp_close( session );
     close(client);
+
     return EXIT_SUCCESS;
 }
