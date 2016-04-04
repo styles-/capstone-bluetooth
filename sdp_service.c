@@ -80,7 +80,7 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     if (session == NULL) {
         // fprintf(stderr, "Error: (sdp_session_t *) session == null -> %s(%d)\n", strerror(errno), errno);
         // exit(EXIT_FAILURE);
-        handleError("Error: (sdp_session_t *) session == null");
+        handleError("Error(%d) (sdp_session_t *) session == null");
     } else {
         sdp_record_register(session, &record, 0);
     }
@@ -188,11 +188,12 @@ void write_server(const int client, const char *msg) {
 }
 
 inline void handleError(char *msg) {
-    perror(msg);
+    // perror(msg);
+    fprintf(stderr, msg, errno);
     exit(EXIT_FAILURE);
 }
 
-int main() {
+int main(int argc, char **argv) {
 #ifdef DEBUG
     puts("Debugging enabled..");
 #endif
