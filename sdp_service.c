@@ -76,15 +76,12 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     // connect to the local SDP server, register the service record, and disconnect
     session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
     if (session == NULL) {
-        fprintf(stderr, "Error: session == null | %s(%d)\n", strerror(errno), errno);
+        fprintf(stderr, "Error: (sdp_session_t *) session == null -> %s(%d)\n", strerror(errno), errno);
         exit(EXIT_FAILURE);
     } else {
-        int test = sdp_record_register(session, &record, 0);
-        if (test < 0) {
-            fprintf(stderr, "sdp_record_register error\n");
-            exit(EXIT_FAILURE);
-        }
+        sdp_record_register(session, &record, 0);
     }
+    
     // cleanup
     sdp_data_free(channel);
     sdp_list_free(l2cap_list, 0);
@@ -137,15 +134,17 @@ int init_server(const int port) {
     return client;
 }
 
-char *read_server(const int client) {
+void read_server(const int client, char *response) {
     // read data from the client
-    char input[1024] = { 0 };
-    int bytes_read = read(client, input, sizeof(input));
+//    char input[1024] = { 0 };
+//    int bytes_read = read(client, input, sizeof(input));
+    int bytes_read = read(client, response, sizeof(response));
     if (bytes_read > 0) {
-        printf("recieved [%s]\n", input);
-        return input;
-    } else {
-        return "";
+        printf("recieved [%s]\n", response);
+//        printf("recieved [%s]\n", input);
+//        return input;
+//    } else {
+//        return "";
     }
 }
 

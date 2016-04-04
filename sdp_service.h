@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/socket.h>
-//#include <uuid/uuid.h>
+
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 #include <bluetooth/hci.h>
@@ -24,7 +24,7 @@
 
 sdp_session_t *register_service(const uint8_t rfcomm_channel);
 int init_server(const int port);
-char *read_server(const int client);
+void read_server(const int client, char *response);
 void write_server(const int client, const char *msg);
 
 #endif /* sdp_service_h */
