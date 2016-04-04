@@ -121,8 +121,12 @@ int init_server(const int port) {
     
     // put socket into listening mode
     result = listen(sock, 1);
+    if (result != 0) {
+        fprintf(stderr, "Error: listen() unsuccessful -> %s(%d)\n", strerror(errno), errno);
+        exit(EXIT_FAILURE);
+    }
 #ifdef DEBUG
-    printf("listen() returned %d\n", result);
+    puts("listen() was successful");
 #endif
     
     //sdpRegisterL2cap(port)
