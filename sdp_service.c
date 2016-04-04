@@ -196,6 +196,7 @@ int main() {
     puts("Debugging enabled..");
 #endif
     
+    errno = 14;
     handleError("Testing this out");
 
     int port = 14;
