@@ -109,14 +109,22 @@ int init_server(const int port) {
     
     // allocate socket
     sock = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+    if (sock < 0) {
+        fprintf(stderr, "Error: socket() unsuccessful -> %s(%d)\n", strerror(errno), errno);
+        exit(EXIT_FAILURE);
+    }
 #ifdef DEBUG
-    printf("socket() returned %d\n", sock);
+    printf("socket() was successful and returned %d\n", sock);
 #endif
     
     // bind socket to <port> of the first available
     result = bind(sock, (struct sockaddr *) &loc_addr, sizeof(loc_addr));
+    if (result != 0) {
+        fprintf(stderr, "Error: bind() unsuccessful -> %s(%d)\n", strerror(errno), errno);
+        exit(EXIT_FAILURE);
+    }
 #ifdef DEBUG
-    printf("bind() on channel %d return %d\n", port, result);
+    printf("bind() on channel %d was successful\n", port);
 #endif
     
     // put socket into listening mode
@@ -133,9 +141,12 @@ int init_server(const int port) {
     
     // accept one connection
 #ifdef DEBUG
-    puts("calling accept()\n");
+    puts("calling accept()..\n");
 #endif
     client = accept(sock, (struct sockaddr *) &rem_addr, &opt);
+    if (client < 0) {
+
+    }
 #ifdef DEBUG
     printf("accept() returned %d\n", client);
 #endif
@@ -175,11 +186,18 @@ void write_server(const int client, const char *msg) {
 #endif
 }
 
+inline void handleError(char *msg) {
+    perror(msg);
+    exit(EXIT_FAILURE);
+}
+
 int main() {
 #ifdef DEBUG
     puts("Debugging enabled..");
 #endif
     
+    handleError("Testing this out");
+
     int port = 14;
     // register service
     sdp_session_t *session = register_service(port);

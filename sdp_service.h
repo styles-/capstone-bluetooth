@@ -26,5 +26,6 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel);
 int init_server(const int port);
 void read_server(const int client, char *response);
 void write_server(const int client, const char *msg);
+inline void handleError(char *msg);
 
 #endif /* sdp_service_h */
