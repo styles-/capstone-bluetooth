@@ -78,8 +78,9 @@ sdp_session_t *register_service(const uint8_t rfcomm_channel) {
     // connect to the local SDP server, register the service record, and disconnect
     session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY);
     if (session == NULL) {
-        fprintf(stderr, "Error: (sdp_session_t *) session == null -> %s(%d)\n", strerror(errno), errno);
-        exit(EXIT_FAILURE);
+        // fprintf(stderr, "Error: (sdp_session_t *) session == null -> %s(%d)\n", strerror(errno), errno);
+        // exit(EXIT_FAILURE);
+        handleError("Error: (sdp_session_t *) session == null");
     } else {
         sdp_record_register(session, &record, 0);
     }
