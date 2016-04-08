@@ -7,9 +7,6 @@
 //
 
 #include "sdp_service.h"
-#include "bt_info.h"
-
-//#define UUID_STR "9159BA6D-F5BA-43C6-8C9B-0E318CBD1809"
 
 /**
  * register_service
@@ -21,8 +18,9 @@
  *  - 
  */
 sdp_session_t *register_service(const uint8_t rfcomm_channel) {
-    int32_t svc_uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
-    //uint32_t svc_uuid_int[] = { 0x00001101, 0x00001000, 0x80000080, 0x5f9b34fb };
+    // uint32_t svc_uuid_int[] = { 0x9159BA6D, 0xF5BA43C6, 0x8C9B0E31, 0x8CBD1809 };
+    // uint32_t svc_uuid_int[] = { 0x00001101, 0x00001000, 0x80000080, 0x5f9b34fb };
+    uint32_t svc_uuid_int[] = UUID_MEA;
     const char *service_name = "My EMG Arm Bluetooth Server";
     const char *svc_dsc = "A server that interfaces with the My EMG Arm Android app";
     const char *service_prov = "MyEmgArm";
@@ -209,13 +207,13 @@ void write_server(const int client, const char *msg) {
         return;
     }
 
-    char msgArray[1024] = { 0 };
+    char buf[1024] = { 0 };
     int bytes_sent;
-    sprintf(msgArray, msg);
-    bytes_sent = write(client, msgArray, sizeof(msgArray));
+    sprintf(buf, msg);
+    bytes_sent = write(client, buf, sizeof(buf));
     if (bytes_sent > 0) {
         #ifdef DEBUG
-        printf("sent [%s]\n", msgArray);
+        printf("sent [%s]\n", buf);
         #endif
     } else {
         handleError("Error: couldn't send data to client");
@@ -236,10 +234,42 @@ inline void handleError(char *msg) {
     exit(EXIT_FAILURE);
 }
 
+inline void printError(char *msg) {
+    fprintf(stderr, "%s -> %s(%d)\n", msg, strerror(errno), errno);
+}
+
+int getBoundSocketOnFirstPort() {
+    int sock, port, status;
+    struct sockaddr_rc to_bind;
+    sock = socket( AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM );
+    to_bind.rc_family = AF_BLUETOOTH;
+    to_bind.rc_bdaddr = *BDADDR_ANY;
+    to_bind.rc_channel = 0;
+
+    status = bind( sock, (struct sockaddr *) &to_bind, sizeof(to_bind) );
+    if ( status == 0 ) {
+        #ifdef DEBUG
+        struct sockaddr_in sa;
+        int sa_len = sizeof(sa);
+        if ( getsockname(sock, &sa, &sa_len) == -1 ) {
+            printtError("Error: getsockname() on Bluetooth socket failed");
+        } else {
+            fprintf(stderr, "Bluetooth socket bound to port %d\n", (int) ntohs(sa.sin_port));
+        }
+        #endif
+
+        return sock;
+    } else {
+        return -1;
+    }
+}
+
 int main(int argc, char **argv) {
     #ifdef DEBUG
-    puts("Debugging enabled..");
+    puts("Debugging enabled");
     #endif
+
+    srand(time(NULL));
 
     int port = 14;
 

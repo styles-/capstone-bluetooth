@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
+#include <sys/time.h>
 #include <errno.h>
 #include <sys/socket.h>
 
@@ -22,6 +24,8 @@
 #include <bluetooth/hci_lib.h>
 #include <bluetooth/sdp.h>
 #include <bluetooth/sdp_lib.h>
+
+#include "bt_info.h"
 
 sdp_session_t *register_service(const uint8_t rfcomm_channel);
 int init_server(const int port);
