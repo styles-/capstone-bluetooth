@@ -240,13 +240,13 @@ bool BluetoothServer::isSdpSessionActive() {
 
 std::string BluetoothServer::readMessage() {
     char response[1024];
-    int bytes_read = read(client, response, sizeof(response));
+    int bytes_read = read(mClient, response, sizeof(response));
     
     if (bytes_read > 0) {
 /*
         printf("recieved [%s]\n", response);
  */
-        return string(response);
+        return std::string(response);
     } else {
         std::cout << "Nothing received from client!" << std::endl;
         return "";
@@ -254,7 +254,7 @@ std::string BluetoothServer::readMessage() {
 }
 
 void BluetoothServer::writeMessage(std::string msg) {
-    if ( msg == nullptr || msg.length() == 0 ) {
+    if ( msg.length() == 0 ) {
         std::cout << "Nothing to send to the client!";
         return;
     }
@@ -262,14 +262,17 @@ void BluetoothServer::writeMessage(std::string msg) {
     char msgArray[1024] = { 0 };
     int bytes_sent;
     //std::string s
-    memcpy(msgArray, s.c_str(), s.size());
+    memcpy(msgArray, msg.c_str(), msg.size());
     msgArray[1023] = 0;
     
-    bytes_sent = write( client, )
+    bytes_sent = write( client, msgArray, sizeof(msgArray) );
+    if ( bytes_sent > 0 ) {
+        std::cout << "Sent [" << msg << "]" << std::endl;
+    }
 }
 
 std::string BluetoothServer::toString() {
-    stringstream ss;
-    
+    std::stringstream ss;
+    ss << "Bluetooth Server" << std::endl;
     return ss.str();
 }
