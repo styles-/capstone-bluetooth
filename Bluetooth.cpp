@@ -8,6 +8,9 @@
 
 #include "Bluetooth.hpp"
 
+// We'll start generating IDs at 0
+int BluetoothServer::sId = 0;
+
 BluetoothServer::BluetoothServer(bool setupSdpSession ) {
     mId = getBluetoothServerId();
     initServer();

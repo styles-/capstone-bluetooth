@@ -48,7 +48,7 @@ private:
     static int getBluetoothServerId();
     
 public:
-    static int sId = 0;
+    static int sId;
     
     BluetoothServer(bool setupSdpSession);
     ~BluetoothServer();
