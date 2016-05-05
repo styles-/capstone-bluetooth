@@ -265,7 +265,7 @@ void BluetoothServer::writeMessage(std::string msg) {
     memcpy(msgArray, msg.c_str(), msg.size());
     msgArray[1023] = 0;
     
-    bytes_sent = write( client, msgArray, sizeof(msgArray) );
+    bytes_sent = write( mClient, msgArray, sizeof(msgArray) );
     if ( bytes_sent > 0 ) {
         std::cout << "Sent [" << msg << "]" << std::endl;
     }
