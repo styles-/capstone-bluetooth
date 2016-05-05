@@ -9,6 +9,7 @@
 #ifndef Bluetooth_hpp
 #define Bluetooth_hpp
 
+#include <cstdlib>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -29,6 +30,8 @@
 
 class BluetoothServer {
 private:
+    static int sId;
+    
     int mId;
     int mRfcommChan;
     int mClient;
@@ -48,8 +51,6 @@ private:
     static int getBluetoothServerId();
     
 public:
-    static int sId;
-    
     BluetoothServer(bool setupSdpSession);
     ~BluetoothServer();
     int getClient();
