@@ -11,6 +11,8 @@
 BluetoothServer::BluetoothServer(bool setupSdpSession ) {
     mId = getBluetoothServerId();
     initServer();
+    setSetupSdpSession(setupSdpSession);
+    setIsSdpSessionActive(false);
     if ( setupSdpSession ) {
         registerService();
     }

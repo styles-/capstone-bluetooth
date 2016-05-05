@@ -35,8 +35,8 @@ private:
     int mPort;
     int mSocket;
     sdp_session_t *mSdpSession;
-    bool mSetupSdpSession = false;
-    bool mSdpSessionActive = false;
+    bool mSetupSdpSession;
+    bool mSdpSessionActive;
     
     void initServer();
     int bindToFirst();
