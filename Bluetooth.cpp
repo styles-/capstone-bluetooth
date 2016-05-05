@@ -13,12 +13,14 @@ int BluetoothServer::sId = 0;
 
 BluetoothServer::BluetoothServer(bool setupSdpSession ) {
     mId = getBluetoothServerId();
-    initServer();
-    setSetupSdpSession(setupSdpSession);
-    setIsSdpSessionActive(false);
+    
+    setSetupSdpSession( setupSdpSession );
+    setIsSdpSessionActive( false );
     if ( setupSdpSession ) {
         registerService();
     }
+    
+    initServer();
 }
 
 BluetoothServer::~BluetoothServer() {
@@ -29,7 +31,7 @@ BluetoothServer::~BluetoothServer() {
 
 void BluetoothServer::closeServer() {
     std::cout << "Closing bluetooth server " << mId << std::endl;
-    delete(this);
+    //delete(this);
 }
 
 int BluetoothServer::getBluetoothServerId() {
